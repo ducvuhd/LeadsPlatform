@@ -1,0 +1,119 @@
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> <b>Campaign</b>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <ng-select [items]="lstCampaign" bindLabel="name" bindValue="id" [(ngModel)]="campaignForImport.id"
+                    placeholder="--Campaign--">
+                  </ng-select>
+                </div>
+                <div class="col-md-3 col-lg-3" style="line-height: 29px;">
+                  <input style="width:100%;" #file accept=".xlsx" name="formFile" type="file">
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <a href="javascript:void(0)" aria-pressed="true" class="btn btn-square btn-primary active pull-right"
+                    type="button" (click)="uploadFile(file.files)"><i class="icon-cloud-upload"></i>
+                    Import Lead</a>
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <a href="javascript:void(0)" aria-pressed="true" class="btn btn-square btn-danger active pull-right"
+                    type="button" (click)="downloadTemplate()"><i class="icon-cloud-download"></i> Download Template
+                    Import Excel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-12" *ngIf="showDivError.length > 0">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> <b>Import không thành công. Dưới đây là thông tin thứ tự rows bị lỗi</b>
+          </div>
+          <div class="card-body" [innerHTML]="showDivError">
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="lstCampaign.length > 0">
+        <div class="col-md-12 col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              <i class="fa fa-align-justify"></i> <b>DANH SÁCH CAMPAIGN</b>
+              <a href="javascript:void(0)" aria-pressed="true" class="btn btn-square btn-primary active pull-right"
+                type="button" data-toggle="modal" (click)="resetCampaign();updatecampaign.show()"><i
+                  class="icon-plus"></i> Thêm campaign</a>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="dataTableExample1" class="table table-bordered table-striped table-hover">
+                  <thead class="back_table_color">
+                    <tr>
+                      <th style="width:20px;">STT</th>
+                      <th>Mã campaign</th>
+                      <th>Tên</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let campaign of lstCampaign; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{campaign.id}}</td>
+                      <td>{{campaign.name}}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- <div class="card-foot">
+              <pagination-controls class="pagination-md" (pageChange)="pageChange($event)" maxSize="10"
+                directionLinks="true" responsive="true" previousLabel="Previous" nextLabel="Next"
+                screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page">
+              </pagination-controls>
+            </div> -->
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div bsModal #updatecampaign="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Campaign</h4>
+        <button type="button" class="close" (click)="updatecampaign.hide();f.resetForm()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form name="form" (ngSubmit)="f.form.valid && update(f)" #f="ngForm" novalidate>
+        <div class="modal-body">
+          <div class="card-body row">
+            <div class="col-md-12 col-sm-12">
+              <div class="form-group">
+                <label>Tên campaign<span class="red">*</span></label>
+                <input type="text" [(ngModel)]="campaign.name" placeholder="Name" name="name" required #name="ngModel"
+                  class="form-control">
+                <ng-container *ngIf="f.submitted && name.invalid">
+                  <span *ngIf="name.errors.required" class="text-danger">Vui lòng nhập tên campaign</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="updatecampaign.hide();f.resetForm()">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,25 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-header">
+            <strong>Credit Card</strong>
+            <small>Form</small>
+          </div>
+          <div class="card-body">
+            <div class="row">
+                <form action="http://localhost:5000/api/shift-exchange-employee/upload-shift-schedule" enctype="multipart/form-data" method="post">
+                    <dl>
+                        <dd>
+                            <input #file accept=".xlsx" name="formFile" type="file">
+                        </dd>
+                    </dl>
+                    <button type="button" (click)="uploadFile(file.files)"  class="btn">Upload</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

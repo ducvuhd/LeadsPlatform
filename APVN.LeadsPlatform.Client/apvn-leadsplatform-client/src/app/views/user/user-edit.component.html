@@ -1,0 +1,121 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{editMode}} User</strong>
+        </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" method="post" enctype="multipart/form-data"
+          class="form-horizontal">
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Tên đăng nhập</label>
+              <div class="col-md-9">
+                <!--<p class="form-control-static">Username</p>-->
+                <input type="text" id="txtUsername" name="Username" formControlName="userName" class="form-control"
+                  placeholder="Tên đăng nhập" maxlength="50" autocomplete="off"
+                  [ngClass]="{ 'is-invalid': submitted && f.userName.errors }">
+                <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
+                  <div *ngIf="f.userName.errors.required">Tên đăng nhập không được để trống.</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="!edit">
+              <label class="col-md-3 col-form-label" for="password-input">Mật khẩu</label>
+              <div class="col-md-9">
+                <input type="password" id="txtPassword" name="password-input" formControlName="password"
+                  class="form-control" placeholder="Mật khẩu" maxlength="24" autocomplete="off"
+                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                  <div *ngIf="f.password.errors.required">Mật khẩu không được để trống.</div>
+                  <div *ngIf="f.password.errors.minlength">Mật khẩu tối thiểu 6 ký tự</div>
+                  <div *ngIf="f.password.errors.maxlength">Mật khẩu tối đa 24 ký tự</div>
+                </div>
+                <!--<span class="help-block">Please enter a complex password</span>-->
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="!edit">
+              <label class="col-md-3 col-form-label" for="password-input">Xác nhận mật khẩu</label>
+              <div class="col-md-9">
+                <input type="password" id="txtRePassword" name="re-password-input" formControlName="confirmPassword"
+                  class="form-control" placeholder="Xác nhận mật khẩu" autocomplete="off" maxlength="24"
+                  [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }">
+                <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+                  <div *ngIf="f.confirmPassword.errors.required">Xác nhận mật khẩu không được để trống.</div>
+                  <div *ngIf="f.confirmPassword.errors.mustMatch">Xác nhận mật khẩu không khớp</div>
+                </div>
+                <!--<span class="help-block">Please enter a complex password</span>-->
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Tên đầy đủ</label>
+              <div class="col-md-9">
+                <input type="text" id="txtFullname" name="fullname" formControlName="displayName" class="form-control"
+                  placeholder="Tên đầy đủ">
+                <!--<span class="help-block">This is a help text</span>-->
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Email</label>
+              <div class="col-md-9">
+                <input type="email" id="email-input" name="Email" formControlName="email" class="form-control"
+                  placeholder="Email" autocomplete="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                  pattern="^[a-z0-9]+([._-][a-z0-9]+)*@([a-z0-9]+)([\.-_][a-z0-9]+)*\.[a-z]{2,4}$">
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors.required">Email không được để trống.</div>
+                  <div *ngIf="f.email.errors.pattern">Email không đúng định dạng.</div>
+                </div>
+                <!--<span class="help-block">Please enter your email</span>-->
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Số điện thoại</label>
+              <div class="col-md-9">
+                <input type="email" id="txtPhone" name="Phone" formControlName="mobile" class="form-control"
+                  placeholder="Số điện thoại" autocomplete="phone"
+                  [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" pattern="^(\\+84|0)[93785][0-9]{8}$">
+                <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                  <div *ngIf="f.mobile.errors.required">Số điện thoại không được để trống.</div>
+                  <div *ngIf="f.mobile.errors.pattern">Số điện thoại không hợp lệ.</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="textarea-input">Nhóm quyền</label>
+              <div class="col-md-9 col-form-label">
+                <div class="form-check col-md-12 col-form-label" *ngFor="let role of groupRoles">
+                  <input class="form-check-input" type="checkbox" [(ngModel)]="role.IsSelected" value="{{role.RoleId}}"
+                    id="role_{{role.RoleId}}" [ngModelOptions]="{standalone: true}">
+                  <label class="form-check-label" for="role_{{role.RoleId}}">
+                    {{role.RoleName}}
+                  </label>
+                </div>
+                <div *ngIf="submitted &&  lstRoleId.length == 0" class="invalid-feedback" style="display: block;">
+                  <div>Quyền không được bỏ trống.</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="select1">Trạng thái</label>
+              <div class="col-md-9">
+                <select id="select1" name="select1" class="form-control" formControlName="status"
+                  [ngClass]="{ 'is-invalid': submitted && f.status.errors }">
+                  <option [ngValue]="0">Khóa</option>
+                  <option [ngValue]="1">Kích hoạt</option>
+                </select>
+                <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+                  <div *ngIf="f.status.errors.required">Chưa chọn trạng thái.</div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="txtUserId" name="UserId" formControlName="userId" class="form-control">
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Lưu</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--/.row-->
+</div>

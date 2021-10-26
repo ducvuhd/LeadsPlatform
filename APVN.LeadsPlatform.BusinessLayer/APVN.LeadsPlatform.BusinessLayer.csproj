@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\APVN.LeadsPlatform.Caching\APVN.LeadsPlatform.Caching.csproj" />
+    <ProjectReference Include="..\APVN.LeadsPlatform.DataAccessLayer\APVN.LeadsPlatform.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\APVN.LeadsPlatform.Entity\APVN.LeadsPlatform.Entity.csproj" />
+    <ProjectReference Include="..\APVN.LeadsPlatform.Models\APVN.LeadsPlatform.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,313 @@
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header"><i class="fa fa-check"></i>Thông tin leads </div>
+          <div class="card-body">
+            <p class="title-big"><b>Thông tin cơ bản của LEADS</b></p>
+            <div class="row">
+              <div class="col-md-6">
+                <p>Tên: <span class="font-w-600">{{leadsModel?.FullName}}</span></p>
+                <p>Email: <span class="font-w-600">{{leadsModel?.Email}}</span></p>
+                <p>SDT: <span class="font-w-600">{{leadsModel?.Mobile}}</span></p>
+                <p>Nơi ở: <span class="font-w-600">{{leadsModel?.CityName}}</span></p>
+                <p>Địa chỉ chi tiết: <span class="font-w-600">{{leadsModel?.Address}}</span></p>
+                <p>Ngày đăng kí: <span class="font-w-600">{{leadsModel?.CreatedDateName}}</span></p>
+              </div>
+              <div class="col-md-6">
+                <p>Tình trạng leads: <b><span class="font-w-600">{{leadsModel?.ActiveName}}</span></b></p>
+                <p>Giao cho: <span class="font-w-600">{{leadsModel?.AssignToName}}</span></p>
+                <p>Ghi chú: <span class="font-w-600">{{leadsModel?.Description}}</span></p>
+                <p>Mô tả nhu cầu: <span class="font-w-600">{{leadsModel?.ExpectedDescription}}</span></p>
+              </div>
+            </div>
+            <ng-container *ngIf="listAction.length > 0">
+              <p class="title-big"><b>Thông tin xe</b></p>
+              <div [collapse]="isCollapsed1">
+                <div *ngFor="let i=index; let laItem of listAction" class="box-panel-cst">
+                  <p><span class="badge badge-success">Xe <span class="font-w-600">{{i+1}}</span></span><span
+                      class="badge badge-primary"> Mã Id:
+                      <span class="font-w-600">{{laItem.Id}}</span></span></p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p>Hãng xe: <span class="font-w-600">{{laItem.MakeName}}</span></p>
+                      <p>Dòng xe: <span class="font-w-600">{{laItem.ModelName}}</span></p>
+                      <p>Campaign: <span class="font-w-600">{{laItem.CampaignName}}</span></p>
+                      <p>Ngày đăng kí: <span class="font-w-600">{{laItem.CreatedDateName}}</span></p>
+                      <p>Tỉnh thành đăng kí: <span class="font-w-600">{{laItem.CityName}}</span></p>
+                      <p>Box thu leads: <span class="font-w-600">{{laItem.TypeName}}</span></p>
+                      <p>Box thu leads (Nhu cầu khác): <span class="font-w-600">{{laItem.SaleSetTypeName}}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                      <p>Hình thức thanh toán: <span class="font-w-600">{{laItem.PaymentStatusName}}</span></p>
+                      <!-- <p>Trạng thái CS chăm sóc: <span class="font-w-600">{{laItem.StatusName}}</span></p> -->
+                      <p>Vay mua xe: <span class="font-w-600">{{laItem.HadLoanName}}</span></p>
+                      <p>Đăng kí lái thử: <span class="font-w-600">{{laItem.HadTestDriveName}}</span></p>
+                      <p>Trả giá: <span class="font-w-600">{{laItem.BargainName}}</span></p>
+                      <p>Tư vấn mua xe: <span class="font-w-600">{{laItem.ConsultantName}}</span></p>
+                      <p>Đăng kí nhận voucher: <span class="font-w-600">{{laItem.VoucherName}}</span></p>
+                    </div>
+                    <div class="col-md-12">
+                      <p>Trạng thái CS chăm sóc:
+                        <div class="form-group row">
+                          <div class="col-md-2 col-form-label" *ngFor="let status of listLeadActionStatus">
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="{{i+1}}"
+                                id="{{laItem.Id}}_{{status.Key}}" [(ngModel)]="laItem.Status" [value]="status.Key"
+                                [disabled]="status.Key == 4 ? true: false">
+                              <label class="form-check-label" for="{{laItem.Id}}_{{status.Key}}">
+                                {{status.Value}}
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-1 col-form-label" style="padding: 0;">
+                            <button class="btn btn-block btn-success" type="button"
+                              (click)="saveLeadActionStatus(laItem.Status, laItem.Id)">Lưu</button>
+                          </div>
+                        </div>
+                    </div>
+                    <ng-container>
+                      <div class="col-md-12" *ngIf="laItem.ListLeadsActionExtends.length > 0">
+                        <p><b><i>Thông tin box thu lead</i></b></p>
+                      </div>
+                      <div class="" *ngFor="let extends of laItem.ListLeadsActionExtends"
+                        style="display: inline-block;width: 95%; margin: 0 auto; border: 1px dashed #ccc;padding: 10px;">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <p>Tình trạng xe: <span class="font-w-600">{{extends.SecondHandName}}</span></p>
+                            <p>Tỉnh thành: <span class="font-w-600">{{extends.CityName}}</span></p>
+                            <p>Giá niêm yết: <span class="font-w-600">{{extends.BargainCurrentPricesName}}</span></p>
+                            <p>Giá đề xuất: <span class="font-w-600">{{extends.BargainPricesName}}</span></p>
+                          </div>
+                          <div class="col-md-6">
+                            <p>Ngân hàng: <span class="font-w-600">{{extends.BankName}}</span></p>
+                            <p>Số tiền vay: <span class="font-w-600">{{extends.LoanMoneyName}}</span></p>
+                            <p>Thời gian vay: <span class="font-w-600">{{extends.LoanTimeName}}</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div *ngIf="laItem.DealerLeadList != undefined && laItem.DealerLeadList.length > 0" class="row">
+                    <div class="col-md-12" style="margin-top: 20px;">
+                      <p><b><i>Thông tin dealer được gán</i></b></p>
+                    </div>
+                  </div>
+                  <div class="row" style="width: 97%; margin: 0 auto; ">
+                    <div *ngFor="let iDll=index; let dll of laItem.DealerLeadList" class="col-md-6"
+                      style="display: inline-block;border: 1px dashed #ccc;padding: 10px;">
+                      <p>Dealer <span class="font-w-600">{{iDll+1}}</span>: </p>
+                      <p>Tên: <span class="font-w-600">{{dll.DealerName}}</span></p>
+                      <p>Ngày dealer nhận leads: <span class="font-w-600">{{dll.DealerRecievedDateName}}</span></p>
+                      <p>Ghi chú của leads: <span class="font-w-600">{{dll.DealerNote}}</span></p>
+                      <p>Trạng thái dealer chăm sóc: <span class="font-w-600">{{dll.StatusName}}</span></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-12" style="margin-bottom: 1rem;padding: 0;">
+                <button type="button" class="btn btn-primary" (click)="isCollapsed1 = !isCollapsed1">
+                  {{isCollapsed1?"Mở rộng":"Thu gọn"}}
+                </button>
+              </div>
+            </ng-container>
+            <p class="title-big"><b>Thông tin thêm của LEADS</b></p>
+            <div class="row">
+              <div class="col-md-6">
+                <p style="font-style: italic;">1. Thông tin thêm về nhu cầu vay mua xe</p>
+                <p>Thu nhập qua ngân hàng ổn định hàng tháng: <span
+                    class="font-w-600">{{leadsModel?.GoodAddressName}}</span></p>
+                <p>Có hộ khẩu ở các TP lớn hay không: <span class="font-w-600">{{leadsModel?.StableIncomeName}}</span>
+                </p>
+                <p>Nghề nghiệp(tên nghề/ kinh doanh riêng dạng hộ gia đình hay công ty): <span
+                    class="font-w-600">{{leadsModel?.Job}}</span></p>
+                <p>Mức thu nhập: <span class="font-w-600">{{leadsModel?.IncomeName ? leadsModel?.IncomeName : 0}}</span>
+                  VNĐ</p>
+              </div>
+              <div class="col-md-6">
+                <p style="font-style: italic;">2. Thông tin thêm về các mẫu xe khác</p>
+                <p>Có đang tìm kiếm các mẫu xe khác không: <span
+                    class="font-w-600">{{leadsModel?.LookingOtherCarName}}</span></p>
+                <p>Tên xe khác đang tìm kiếm: <span class="font-w-600">{{leadsModel?.OtherCar}}</span></p>
+                <p>Có cởi mở cho gợi ý từ salesman cho những dòng xe khác/ hãng xe khác không:
+                  <span class="font-w-600">{{leadsModel?.GoodActionDealerName}}</span></p>
+                <p>Nếu có thì yếu tố gì để kh cân nhắc: <span class="font-w-600">{{leadsModel?.DealerConsider}}</span>
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <p style="font-style: italic;">3. Thông tin thêm về nhu cầu</p>
+                <p>Nhu cầu(đổi hoặc mua xe): <b><span class="font-w-600">{{leadsModel?.IsChangeCarName}}</span></b></p>
+                <div *ngIf="leadsModel?.IsChangeCar">
+                  <p>Đổi xe lần: <span class="font-w-600">{{leadsModel?.ChangeCarTime}}</span></p>
+                  <p>Con xe hiện tại: <span class="font-w-600">{{leadsModel?.CurrentCar}}</span></p>
+                  <p>Có nhu cầu bán xe cũ không: <span class="font-w-600">{{leadsModel?.IsSoldCarName}}</span></p>
+                  <p>Lý do muốn đổi xe: <span class="font-w-600">{{leadsModel?.ReasonChangeCar}}</span></p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <p style="font-style: italic;">4. Thông tin thêm về gia đình</p>
+                <p>Có vợ chưa: <span class="font-w-600">{{leadsModel?.HasWifeName}}</span></p>
+                <p>Có con chưa: <span class="font-w-600">{{leadsModel?.HasChildName}}</span></p>
+                <p>Thu nhập tổng hộ: <span
+                    class="font-w-600">{{leadsModel?.FamilyIncomeName?leadsModel?.FamilyIncomeName:0}}</span> VNĐ</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <p style="font-style: italic;">5. Thông tin thêm về mẫu xe quan tâm</p>
+                <p>Phiên bản: <span class="font-w-600">{{leadsModel?.Version}}</span></p>
+                <p>Năm sản xuất: <span class="font-w-600">{{leadsModel?.Year}}</span></p>
+                <p>Màu sắc: <span class="font-w-600">{{leadsModel?.Color}}</span></p>
+                <p>Khoảng giá: <span class="font-w-600">{{leadsModel?.PriceRage}}</span></p>
+              </div>
+              <div class="col-md-6">
+                <p style="font-style: italic;">6. Thông tin về nhu cầu lái thử</p>
+                <p>Quận/Huyện muốn thử xe: <span class="font-w-600">{{leadsModel?.CityTestDrive}}</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Thông tin chăm sóc
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p>Ngày chăm sóc: <span class="font-w-600">{{leadsModel?.StartCareDateName}}</span></p>
+              </div>
+              <div class="col-md-6">
+                <p>Số cuộc gọi đã thực hiện:</p>
+              </div>
+              <div class="col-md-6">
+                <p>Ngày cập nhập thông tin: <span class="font-w-600">{{leadsModel?.LastModifiedDateName}}</span></p>
+              </div>
+              <div class="col-md-6">
+                <p>Trạng thái cuộc gọi gần nhất:</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Ghi chú
+          </div>
+          <div class="card-body">
+            <div class="col-md-12 cold-lg-12" style="text-align:right" *ngIf="permission.IsAdmin() || permission.IsLead() || permission.IsSale()">
+              <button type="button" class="btn btn-success mb-2" (click)="resetFormNote(f);showFormAddNote()">
+                <i class="icon-plus"></i> Thêm mới</button>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Thực hiện bởi</th>
+                  <th>Ngày tháng</th>
+                  <th>Nội dung</th>
+                  <th style="width: 120px;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of leadNoteList">
+                  <td><span class="badge badge-success">{{item.LastModifiedBy}}</span></td>
+                  <td>{{item.LastModifiedDateName}}</td>
+                  <td>{{item.Notes}}</td>
+                  <td style="text-align: center;">
+                    <a href="javascript:void(0)" class="badge badge-danger" *ngIf="permission.IsAdmin() || permission.IsLead() || permission.IsSale()"
+                      (click)="resetFormNote(f);showFormEditNote(item.Id)" style="min-width: 30px;">Sửa</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-foot">
+            <div class="col-xs-12 col-12">
+              <pagination [totalItems]="noteIndexLead.totalRecord" [(ngModel)]="noteIndexLead.pageIndex" [maxSize]="10"
+                class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                [boundaryLinks]="true" [rotate]="false" (numPages)="pageChangedNoteLead($event)"></pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Lịch sử
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Thực hiện bởi</th>
+                  <th>Ngày tháng</th>
+                  <th>Thông tin thay đổi</th>
+                  <th>Trước thay đổi</th>
+                  <th>Sau thay đổi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of leadHistoryList">
+                  <td><span class="badge badge-success">{{item.CreatedBy}}</span></td>
+                  <td>{{item.CreatedDateName}}</td>
+                  <td>{{item.FieldName}}</td>
+                  <td>
+                    {{item.OldValue}}
+                  </td>
+                  <td>{{item.NewValue}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-foot">
+            <div class="col-xs-12 col-12">
+              <pagination [totalItems]="historyIndexLead.totalRecord" [(ngModel)]="historyIndexLead.pageIndex"
+                [maxSize]="10" class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+                lastText="&raquo;" [boundaryLinks]="true" [rotate]="false" (numPages)="pageChangedHistoryLead($event)">
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #modalUpdateNote="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form name="form" (ngSubmit)="updateNote(f)" #f="ngForm" novalidate>
+        <div class="modal-header">
+          <h4 class="modal-title">{{ noteModel.id > 0?"Sửa note":"Tạo note"}}</h4>
+          <button type="button" class="close" (click)="modalUpdateNote.hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card-body row">
+            <div class="col-md-12 col-sm-12">
+              <div class="form-group">
+                <label>Nội dung<span class="text-danger">*</span></label>
+                <textarea id="note" [(ngModel)]="noteModel.notes" name='notes' rows="3" class="form-control"
+                  #notes="ngModel" required placeholder="Nội dung...."></textarea>
+                <ng-container *ngIf="isSubmitNote && notes.invalid">
+                  <span *ngIf="notes.errors.required" class="text-danger">Vui lòng nhập nội dung ghi chú</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modalUpdateNote.hide();">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

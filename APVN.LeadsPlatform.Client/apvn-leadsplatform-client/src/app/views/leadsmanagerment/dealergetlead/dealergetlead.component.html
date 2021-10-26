@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> <b>Quản lý dealer lấy lead</b>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <input type="text" class="form-control" placeholder="Nhập email dealer"
+                    [(ngModel)]="indexModel.dealerEmail" name="KeyWord" />
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <input class="form-control" id="CreatedDate" type="date" [(ngModel)]="indexModel.startDate"
+                    name="StartDate" placeholder="Ngày bắt đầu">
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <input class="form-control" id="CreatedDate" type="date" [(ngModel)]="indexModel.endDate"
+                    name="EndDate" placeholder="Ngày kết thúc">
+                </div>
+                <div class="col-md-3 col-lg-3">
+                  <button class="btn btn-block btn-success" type="button" (click)="getList(1)">
+                    <i class="icon-magnifier"></i> Tìm kiếm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-12" style="padding: 0;">
+          <div class="card">
+            <div class="card-header">
+              <i class="fa fa-align-justify"></i> <b>DANH SÁCH DEALER</b>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="dataTableExample1" class="table table-bordered table-striped table-hover"
+                  style="table-layout: fixed;">
+                  <thead class="back_table_color">
+                    <tr>
+                      <th style="width:50px;">STT</th>
+                      <th style="width:80px;">DealerId</th>
+                      <th>DealerUsername</th>
+                      <th>DealerEmail</th>
+                      <th>Ngày bắt đầu</th>
+                      <th>Ngày kết thúc</th>
+                      <th>Số lượng lead</th>
+                      <th style="width:100px;">Số lượng lead còn lại</th>
+                      <th>Trạng thái</th>
+                      <th style="width:100px;">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of indexModel.listLeadsQuantityForDealer | paginate : { itemsPerPage: indexModel.pageSize, currentPage: indexModel.pageIndex, totalItems: indexModel.totalRecord }; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{item.dealerId}}</td>
+                      <td>{{item.dealerName}}</td>
+                      <td>{{item.dealerEmail}}</td>
+                      <td>{{item.startDateStr}}</td>
+                      <td>{{item.endDateStr}}</td>
+                      <td>{{item.assignQuantity}}</td>
+                      <td>{{item.assignQuantityActive}}</td>
+                      <td *ngIf="item.isActive">
+                        <p class="btn-primary" style="text-align: center;margin: 0;">Hoạt động</p>
+                      </td>
+                      <td *ngIf="!item.isActive">
+                        <p class="" style="text-align: center;margin: 0;">Không hoạt động</p>
+                      </td>
+                      <td class="align-middle" style="text-align: center;">
+                        <div class="btn-group" dropdown>
+                          <button type="button" class="btn dropdown-toggle p-0" dropdownToggle>
+                            <i class="icon-settings"></i>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+                            <a href="javascript:void(0)" class="dropdown-item" *ngIf="!item.isActive"
+                              (click)="showFormSetSchedule(item.dealerId, item.dealerName, item.dealerEmail);f.resetForm()">Tạo
+                              lịch dealer lấy lead</a>
+                            <a href="javascript:void(0)" class="dropdown-item" (click)="cancelFormSetSchedule(item.id)">Hủy</a>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-foot">
+              <div class="col-xs-12 col-12">
+                <pagination-controls class="pagination-md" (pageChange)="pageChangedDealer($event)" maxSize="10"
+                  directionLinks="true" responsive="true" previousLabel="Previous" nextLabel="Next"
+                  screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                  screenReaderCurrentLabel="You're on page">
+                </pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div bsModal #setSchedule="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Tạo lịch dealer lấy lead</h4>
+          <button type="button" class="close" (click)="setSchedule.hide();f.resetForm()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form name="form" (ngSubmit)="f.form.valid && update(f)" #f="ngForm" novalidate>
+          <div class="modal-body">
+            <div class="card-body row">
+              <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                  <label>Ngày bắt đầu<span class="red">*</span></label>
+                  <input class="form-control" id="CreatedDate" type="date" [(ngModel)]="model.startDate"
+                    placeholder="Ngày bắt đầu" required name="startDate" #startDate="ngModel">
+                  <ng-container *ngIf="f.submitted && startDate.invalid">
+                    <span *ngIf="startDate.errors.required" class="text-danger">Vui lòng nhập ngày bắt đầu</span>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                  <label>Ngày kết thúc<span class="red">*</span></label>
+                  <input class="form-control" id="EndDate" type="date" [(ngModel)]="model.endDate"
+                    placeholder="Ngày bắt đầu" required name="endDate" #endDate="ngModel">
+                  <ng-container *ngIf="f.submitted && endDate.invalid">
+                    <span *ngIf="endDate.errors.required" class="text-danger">Vui lòng nhập ngày kết thúc</span>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                  <label>Số lượng lead<span class="red">*</span></label>
+                  <input class="form-control" id="AssignQuantity" type="number" [(ngModel)]="model.assignQuantity"
+                    placeholder="Số lượng lead" required name="assignQuantity" #assignQuantity="ngModel">
+                  <!-- <ng-container *ngIf="(f.submitted && assignQuantity.invalid)">
+                    <span *ngIf="assignQuantity.errors.required || model.assignQuantity == 0" class="text-danger">Vui
+                      lòng nhập số lượng lead</span>
+                  </ng-container> -->
+                  <ng-container *ngIf="(f.submitted && model.assignQuantity <= 0)">
+                    <span *ngIf="model.assignQuantity <= 0" class="text-danger">Vui
+                      lòng nhập số lượng lead</span>
+                  </ng-container>
+                  <ng-container *ngIf="(f.submitted && model.assignQuantity > 0 && model.assignQuantity % 1 != 0)">
+                    <span class="text-danger">Vui lòng nhập đúng số lượng lead</span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="setSchedule.hide();f.resetForm()">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.78" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\APVN.LeadsPlatform.Entity\APVN.LeadsPlatform.Entity.csproj" />
+    <ProjectReference Include="..\APVN.LeadsPlatform.Models\APVN.LeadsPlatform.Models.csproj" />
+    <ProjectReference Include="..\APVN.LeadsPlatform.Utility\APVN.LeadsPlatform.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

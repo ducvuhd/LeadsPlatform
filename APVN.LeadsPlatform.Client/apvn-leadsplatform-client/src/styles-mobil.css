@@ -1,0 +1,26 @@
+@media only screen and (max-width: 600px) {
+    .hide-element-phone {
+        display: none !important;
+    }
+    .pull-left-phone {
+        float: left;
+        width: 100%;
+      }
+    
+      td.pull-left-phone {
+        border: none !important;
+      }
+    .hide-element-in-phone {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    .hide-element-out-phone {
+        display: none !important;
+    }
+
+    .fixedInWeb {
+        position: fixed !important;
+    }
+}

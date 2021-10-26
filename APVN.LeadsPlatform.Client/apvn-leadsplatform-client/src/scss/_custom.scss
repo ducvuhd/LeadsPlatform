@@ -1,0 +1,47 @@
+// Here you can add other styles
+//@import '~angular-notifier/styles.scss';
+// regular style toast 
+@import '~ngx-toastr/toastr';
+ 
+// bootstrap style toast 
+// or import a bootstrap 4 alert styled design (SASS ONLY) 
+// should be after your bootstrap imports, it uses bs4 variables, mixins, functions 
+//@import '~ngx-toastr/toastr-bs4-alert';
+ 
+// if you'd like to use it without importing all of bootstrap it requires 
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+//@import '~ngx-toastr/toastr-bs4-alert';
+
+body{
+    
+}
+.text-inline{
+    white-space: nowrap;
+}
+.hidden{
+    display: none !important;
+}
+.title-big{
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.box-panel-cst{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+/*.table-customer{
+    thead{
+        width: 100%;
+        display: inline-table;
+    }
+    tbody{
+        width: 100%;
+        display: inline-table;
+    }
+}
+*/

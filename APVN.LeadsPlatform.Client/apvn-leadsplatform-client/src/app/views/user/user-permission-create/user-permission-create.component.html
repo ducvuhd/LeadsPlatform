@@ -1,0 +1,50 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-header"></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label >Nhân viên</label>
+                                <select readonly="readonly" class="form-control" [(ngModel)]="permissionSave.userName" >
+                                    <option value="{{permissionInit.userName}}" >{{permissionInit.userName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Quyền </label>
+                                <select class="form-control" [(ngModel)]="permissionSave.roleId">
+                                    <option value="1001">Quản lý</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Chi nhánh </label>
+                                <select class="form-control" (ngModelChange)="changeCity($event)"  [(ngModel)]="permissionSave.cityId">
+                                    <option *ngFor="let item of permissionInit.lstCity" value="{{item.id}}" >{{item.cityName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Phòng ban </label>
+                                <select class="form-control" [(ngModel)]="permissionSave.departmentId">
+                                    <option *ngFor="let item of permissionInit.lstDepartment" value="{{item.id}}" >{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button type="button" (click)="save()" class="btn btn-block btn-primary">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+.icon-settings {
+  color: black;
+}
+
+.dialog-dealer .dropdown-menu.show {
+  width: 100%;
+  padding: 0 10px;
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.dialog-dealer .notify-left {
+  display: inline-block;
+  width: 80%;
+}
+
+.dialog-dealer .notify-left {
+  display: inline-block;
+  width: 90%;
+}
+
+.dialog-dealer .notify-button-g {
+  display: inline-block;
+  width: 10%;
+  cursor: pointer;
+}
+
+.dialog-dealer .notify-button-g .btn-danger {
+  padding: 2px 5px;
+}
+
+.dialog-dealer .notify-elm {
+  border-bottom: 1px solid #e4e7ea;
+  padding: 8px 0;
+}
+
+.dialog-dealer .notify-elm:last-child {
+  border-bottom: none;
+
+}
+
+.dialog-dealer .form-control {
+  padding: 0;
+  padding-right: 35px;
+  padding-left: 10px;
+}
+
+.dialog-dealer .col-md-12.col-sm-12 {
+  padding: 0;
+}
+
+.dialog-dealer .notify-left .title {
+  font-size: 14px;
+  margin: 0;
+}

@@ -1,0 +1,44 @@
+image: docker:stable
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+  - build-static
+  - clean
+
+variables:
+  #DOCKER_HOST: tcp://172.16.0
+  DOCKER_DRIVER: overlay2
+  TESTING_WEB_IMAGE: apvn-leads-flatform/testing
+  STAGING_WEB_IMAGE: $REGISTRY_URL/ap.vn/leads-platform/staging
+  PRODUCT_WEB_IMAGE: $REGISTRY_URL/ap.vn/leads-platform/product
+
+before_script:
+
+    - docker login -u $REGISTRY_USE -p $REGISTRY_PASS  $REGISTRY_URL
+    - export CURRENT_COMMIT=${CI_COMMIT_SHA::6}
+leads-flatform-testing (build-deploy):
+  stage: build
+  tags:
+    - testing-build
+  script:
+    - docker build --cache-from $TESTING_WEB_IMAGE:latest --tag  $TESTING_WEB_IMAGE:latest  . -f APVN.LeadsPlatform/Dockerfiles/Testing.Dockerfile
+    - docker service update --force --image $TESTING_WEB_IMAGE:latest apvn-leads-platform
+  only:
+    - testing
+
+
+leads-flatform-product (build):
+  stage: build
+  tags:
+    - product-build
+  script:
+    - docker build --cache-from $PRODUCT_WEB_IMAGE:latest --tag $PRODUCT_WEB_IMAGE:$CURRENT_COMMIT --tag $PRODUCT_WEB_IMAGE:latest   . -f APVN.LeadsPlatform/Dockerfiles/Production.Dockerfile
+    - docker push $PRODUCT_WEB_IMAGE:$CURRENT_COMMIT
+    - docker push $PRODUCT_WEB_IMAGE:latest
+    - docker rmi -f $PRODUCT_WEB_IMAGE:$CURRENT_COMMIT|| true
+
+  only:
+    - production

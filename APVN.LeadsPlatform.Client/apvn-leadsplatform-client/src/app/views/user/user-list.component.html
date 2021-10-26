@@ -1,0 +1,84 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          Search
+        </div>
+        <div class="card-body">
+          <div class="form-group row">
+            <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control" placeholder="Tên đăng nhập" [(ngModel)]="filter.userName" />
+            </div>
+            <div class="col-md-3 col-lg-3">
+              <button class="btn btn-block btn-success" type="button" (click)="getList(1)">Tìm kiếm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Danh sách người dùng
+          <a [routerLink]="['/user/edit/0']" aria-pressed="true" class="btn btn-square btn-primary active pull-right"
+            type="button">Thêm người dùng</a>
+        </div>
+        <div class="card-body">
+          <div class="row" style="margin-top:10px;">
+            <div class="col-md-12 mb-4">
+              <table class="table" style="table-layout: fixed;">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên đăng nhập</th>
+                    <th width="150" >Trạng thái</th>
+                    <th width="150" >Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let model of filter.result">
+                    <td>{{ model.userId }}</td>
+                    <td>{{ model.userName }}</td>
+                    <td>
+                      <span *ngIf="model.status else spanLockStatus"
+                        style="font-size: 0.875rem; font-weight: 400; line-height: 1.5; color: white;"
+                        class="badge badge-success">Hoạt động</span>
+                      <ng-template #spanLockStatus>
+                        <span style="font-size: 0.875rem; font-weight: 400; line-height: 1.5; color: white;"
+                          class="badge badge-danger">Khóa</span>
+                      </ng-template>
+                    </td>
+                    <td class="align-middle">
+                      <div class="btn-group float-left" dropdown>
+                        <button type="button" class="btn btn-primary dropdown-toggle" dropdownToggle>
+                          Quản lý
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+                          <a [routerLink]="[ '/user/edit', model.userId ]" class="dropdown-item">Sửa</a>
+                          <a class="dropdown-item" href="javascript:void(0)" (click)="getUrlOTPPrivateKey(model.userId)">Tạo mã OTP</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 col-12">
+              <pagination [itemsPerPage]="filter.pageSize" [totalItems]="filter.totalRecord"
+                [(ngModel)]="filter.pageIndex" [maxSize]="5" class="pagination-sm" previousText="&lsaquo;"
+                nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [boundaryLinks]="true" [rotate]="false"
+                (pageChanged)="getList($event.page)"></pagination>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

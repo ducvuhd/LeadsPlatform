@@ -1,0 +1,25 @@
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.hr {
+  border-top: 5px solid rgba(0, 0, 0, 0.1);
+}
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  margin: 5px;
+}
+.card-body-dev{
+  border-top: 1px solid #c8ced3;
+}
+.card-body-dev:first-child{
+  border-top: none;
+}

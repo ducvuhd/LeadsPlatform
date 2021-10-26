@@ -1,0 +1,612 @@
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-header">
+      <strong style="font-size: 20px;">{{modeInsert ? 'Thêm Lead' : 'Sửa Lead'}}</strong>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin cơ bản</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed1">
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="FullName">Họ Tên<span class="text-danger">*</span></label>
+                <div class="col-md-3">
+                  <input type="text" id="FullName" formControlName="FullName" class="form-control"
+                    placeholder="Nhập họ tên">
+                  <div *ngIf="(f.FullName.touched && f.FullName.invalid) || (f.FullName.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <span *ngIf="f.FullName?.errors?.required">Bạn cần nhập họ tên</span>
+                  </div>
+                </div>
+
+                <label class="col-md-1 col-form-label" for="Mobile">SĐT<span class="text-danger">*</span></label>
+                <div class="col-md-3">
+                  <input type="tel" id="Mobile" formControlName="Mobile" class="form-control"
+                    placeholder="Nhập số điện thoại" pattern="^(\\+84|0)[93785][0-9]{8}$">
+                  <div *ngIf="(f.Mobile.touched && f.Mobile.invalid) || (f.Mobile.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <span *ngIf="f.Mobile?.errors?.required">Bạn cần nhập số điện thoại</span>
+                    <div *ngIf="f.Mobile?.errors?.pattern">Số điện thoại không hợp lệ.</div>
+                  </div>
+                </div>
+
+                <label class="col-md-1 col-form-label" for="Email1">Email</label>
+                <div class="col-md-3">
+                  <input type="email" id="Email1" formControlName="Email" class="form-control" placeholder="Nhập email"
+                    autocomplete="email"
+                    pattern="^[a-z0-9]+([._-][a-z0-9]+)*@([a-z0-9]+)([\.-_][a-z0-9]+)*\.[a-z]{2,4}$">
+                  <div *ngIf="(f.Email.touched && f.Email.invalid) ||  (f.Email.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <div *ngIf="f.Email?.errors?.pattern" class="text-danger">Email không đúng định dạng.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="CityId">Tỉnh Thành<span class="text-danger">*</span></label>
+                <div class="col-md-3">
+                  <!-- <input type="number" id="CityId" formControlName="CityId" class="form-control" placeholder="Nhập tỉnh thành"> -->
+                  <ng-select id="CityId" [items]="cityList" bindLabel="cityName" bindValue="cityID"
+                    formControlName="CityId" placeholder="--Tỉnh thành--">
+                  </ng-select>
+                  <div *ngIf="(f.CityId.touched && f.CityId.invalid) || (f.CityId.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <span *ngIf="f.CityId?.errors?.required">Bạn cần chọn tỉnh thành</span>
+                  </div>
+                </div>
+                <label class="col-md-1 col-form-label" for="CreatedDate">Ngày đăng ký<span
+                    class="text-danger">*</span></label>
+                <div class="col-md-3">
+                  <input class="form-control" id="CreatedDate" type="date" formControlName="CreatedDate"
+                    placeholder="Ngày đăng ký">
+                  <div
+                    *ngIf="(f.CreatedDate.touched && f.CreatedDate.invalid) || (f.CreatedDate.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <span *ngIf="f.CreatedDate?.errors?.required">Bạn cần chọn ngày đăng ký</span>
+                  </div>
+                </div>
+                <label class="col-md-1 col-form-label" for="AssignToId">NV chăm sóc</label>
+                <div class="col-md-3">
+                  <ng-select name="ddlStatus" [items]="listUser" bindLabel="userName" bindValue="userId"
+                    formControlName="AssignToId" placeholder="NV chăm sóc...">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="textarea-input">Địa chỉ</label>
+                <div class="col-md-5">
+                  <textarea id="textarea-input" formControlName="Address" rows="3" class="form-control"
+                    placeholder="Nội dung...."></textarea>
+                </div>
+                <label *ngIf="!modeInsert" class="col-md-2 col-form-label" for="IsActive">Mở lead</label>
+                <div *ngIf="!modeInsert" class="col-md-2 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="IsActive" (change)="checkBlockLead(formBlock)"
+                      formControlName="IsActive" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+
+              </div>
+              <div class="form-group row">
+                <label *ngIf="modeInsert" class="col-md-1 col-form-label" for="Note">Ghi chú</label>
+                <div *ngIf="modeInsert" class="col-md-5">
+                  <textarea id="Note" formControlName="Note" rows="3" class="form-control"
+                    placeholder="Nội dung...."></textarea>
+                </div>
+                <label class="col-md-1 col-form-label" for="ExpectedDescription">Mô tả nhu cầu</label>
+                <div class="col-md-5">
+                  <textarea id="ExpectedDescriptiont" formControlName="ExpectedDescription" rows="4"
+                    class="form-control" placeholder="Nội dung...."></textarea>
+                </div>
+                <!-- <label class="col-md-1 col-form-label" for="source">Nguồn<span class="text-danger">*</span></label>
+                <div class="col-md-3">
+                  <ng-select id="source" [items]="sources" bindLabel="Value" bindValue="Key" formControlName="SourceLead"
+                    placeholder="--Nguồn--">
+                  </ng-select>
+                  <div *ngIf="(f.SourceLead.touched && f.SourceLead.invalid) || (f.SourceLead.untouched && formSubmitAttempt)"
+                    class="text-danger">
+                    <span *ngIf="f.SourceLead.errors?.required">Bạn chưa chọn nguồn</span>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed1 = !isCollapsed1">
+                {{isCollapsed1?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <hr>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin xe</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed2">
+              <div class="card" *ngFor='let leadAction of leads.ListAction; let i=index;'
+                style="padding: 10px; padding-bottom: 0;">
+                <p *ngIf="leadAction.Id > 0"><span class="badge badge-primary"> Mã Id: <span
+                      class="font-w-600">{{leadAction.Id}}</span></span></p>
+                <div class="col-md-12 col-lg-12 text-right" style="margin-bottom: 10px;padding: 0;">
+                  <button type="button" *ngIf="leadAction.Id == 0 && leads.ListAction.length > 1" class="btn btn-danger"
+                    (click)="removeHTMLInfoCar(leadAction.Index)"><i class="material-icons-outlined"></i>Xóa TT
+                    xe</button>
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-12" *ngIf="leadAction.Id > 0">
+                    <p>Trạng thái CS chăm sóc:
+                      <div class="form-group row">
+                        <div class="col-md-2 col-form-label" *ngFor="let status of listLeadActionStatus">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="{{i+1}}"
+                              id="{{leadAction.Id}}_{{status.Key}}" [(ngModel)]="leadAction.Status" [value]="status.Key"
+                              [disabled]="status.Key == 4 ? true: false" [ngModelOptions]="{standalone: true}">
+                            <label class="form-check-label" for="{{leadAction.Id}}_{{status.Key}}">
+                              {{status.Value}}
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-1 col-form-label" style="padding: 0;">
+                          <button class="btn btn-block btn-success" type="button"
+                            (click)="saveLeadActionStatus(leadAction.Status, leadAction.Id)">Lưu</button>
+                        </div>
+                      </div>
+                  </div>
+                  <label class="col-md-1 col-form-label" for="HX">Hãng xe<span class="text-danger">*</span></label>
+                  <div class="col-md-3">
+                    <ng-select id="HX" [items]="lstmake" bindLabel="makeName" bindValue="makeID"
+                      [(ngModel)]="leadAction.MakeId" (change)="onChangeMake($event); leadAction.ModelId = null"
+                      placeholder="-- Hãng Xe --" [ngModelOptions]="{standalone: true}">
+                    </ng-select>
+                    <div class="text-danger" *ngIf="(!(leadAction.MakeId > 0) && formSubmitAttempt)">
+                      <span>Bạn chưa chọn hãng xe</span>
+                    </div>
+                  </div>
+
+                  <label class="col-md-1 col-form-label" for="DX">Dòng xe<span class="text-danger">*</span></label>
+                  <div class="col-md-3">
+                    <ng-select id="DX" [items]="lstmodel" bindLabel="modelName" bindValue="modelID"
+                      (click)="getModelFromMakeId(leadAction.MakeId)" [(ngModel)]="leadAction.ModelId"
+                      placeholder="-- Dòng Xe --" [ngModelOptions]="{standalone: true}">
+                    </ng-select>
+                    <div class="text-danger" *ngIf="(!(leadAction.ModelId > 0) && formSubmitAttempt)">
+                      <span>Bạn chưa chọn dòng xe</span>
+                    </div>
+                  </div>
+                  <label class="col-md-1 col-form-label" for="TT">Nhu cầu khác</label>
+                  <div class="col-md-3">
+                    <ng-select id="TTSale" [items]="lstLeadActionSaleSetType" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="leadAction.ListSaleSetType" placeholder="-- CS gọi điện và điền box thu lead--"
+                      [ngModelOptions]="{standalone: true}" [multiple]="true">
+                    </ng-select>
+                  </div>
+
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-1 col-form-label" for="CampaignType">Campaign<span
+                      class="text-danger">*</span></label>
+                  <div class="col-md-3">
+                    <ng-select id="CampaignType" [items]="listCampaign" bindLabel="name" bindValue="id"
+                      placeholder="--Campaign--" [(ngModel)]="leadAction.CampaignId"
+                      [ngModelOptions]="{standalone: true}">
+                    </ng-select>
+                    <div class="text-danger" *ngIf="(!(leadAction.CampaignId > 0) && formSubmitAttempt)">
+                      <span>Bạn chưa chọn Campaign</span>
+                    </div>
+                  </div>
+                  <label class="col-md-1 col-form-label" for="PaymentStatus">TT Thanh toán<span
+                      class="text-danger">*</span></label>
+                  <div class="col-md-3">
+                    <ng-select id="PaymentStatus" [items]="listPayment" bindLabel="Value" bindValue="Key"
+                      placeholder="--TT Thanh toán--" [(ngModel)]="leadAction.PaymentStatus"
+                      [ngModelOptions]="{standalone: true}">
+                    </ng-select>
+                    <div class="text-danger" *ngIf="(!(leadAction.PaymentStatus > 0) && formSubmitAttempt)">
+                      <span>Bạn chưa chọn TT thanh toán</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <strong>Thông tin mở rộng</strong>
+                  </div>
+                  <div class="card-body card-body-dev" *ngFor="let actionExtends of leadAction.ListLeadsActionExtends">
+                    <div class="form-group row">
+                      <label class="col-md-1 col-form-label" for="TT">TT xe<span class="text-danger">*</span></label>
+                      <div class="col-md-3">
+                        <ng-select id="TT" [items]="lstSecondhand" bindLabel="Value" bindValue="Key"
+                          [(ngModel)]="actionExtends.SecondHand" placeholder="-- Tình trạng xe --"
+                          [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                        <div class="text-danger" *ngIf="(!(actionExtends.SecondHand > 0) && formSubmitAttempt)">
+                          <span>Bạn chưa chọn tình trạng xe</span>
+                        </div>
+                      </div>
+                      <label class="col-md-1 col-form-label" for="TT">Danh sách tỉnh thành</label>
+                      <div class="col-md-3">
+                        <ng-select id="TT" [items]="cityList" bindLabel="cityName" bindValue="cityID"
+                          [(ngModel)]="actionExtends.CityId" placeholder="--Tỉnh thành --"
+                          [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                      </div>
+                      <label class="col-md-1 col-form-label" for="TT">Loại box thu lead<span
+                          class="text-danger">*</span></label>
+                      <div class="col-md-3">
+                        <ng-select id="TT" [items]="lstLeadActionType" bindLabel="Value" bindValue="Key"
+                          [(ngModel)]="actionExtends.Type" placeholder="-- Box thu lead --"
+                          [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                        <div class="text-danger" *ngIf="(!(actionExtends.Type > 0) && formSubmitAttempt)">
+                          <span>Bạn chưa chọn box thu lead</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-1 col-form-label" for="TT">Ngân hàng</label>
+                      <div class="col-md-3">
+                        <ng-select id="ActionBankId" [items]="bankList" bindLabel="name" bindValue="id" name="Bank"
+                          placeholder="--Ngân hàng--" [(ngModel)]="actionExtends.BankId"
+                          [ngModelOptions]="{standalone: true}">
+                        </ng-select>
+                      </div>
+                      <label class="col-md-1 col-form-label" for="">Số tiền vay</label>
+                      <div class="col-md-3">
+                        <input class="form-control" currencyMask [(ngModel)]="actionExtends.LoanMoney" name="LoanMoney"
+                          type="text" [ngModelOptions]="{standalone: true}" />
+                      </div>
+                      <label class="col-md-1 col-form-label" for="">Thời gian vay</label>
+                      <div class="col-md-3">
+                        <input class="form-control" name="loantime" type="number" id=""
+                          [(ngModel)]="actionExtends.LoanTime" [ngModelOptions]="{standalone: true}" max-length="3" />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-1 col-form-label" for="">Giá xe hiện tại</label>
+                      <div class="col-md-3">
+                        <input class="form-control" currencyMask [(ngModel)]="actionExtends.BargainCurrentPrices"
+                          name="BargainCurrentPrices" type="text" [ngModelOptions]="{standalone: true}" />
+                      </div>
+                      <label class="col-md-1 col-form-label" for="">Giá xe trả giá</label>
+                      <div class="col-md-3">
+                        <input class="form-control" currencyMask name="BargainPrices" type="text" id=""
+                          [(ngModel)]="actionExtends.BargainPrices" [ngModelOptions]="{standalone: true}" />
+                      </div>
+                    </div>
+                    <div class="col-md-1 col-lg-1">
+                      <button type="button" class="btn btn-block btn-danger"
+                        *ngIf="actionExtends.Id == 0 && leadAction.ListLeadsActionExtends.length > 1"
+                        (click)="removeLeadsAcctionExtends(leadAction.Index,actionExtends.Index)"><i
+                          class="material-icons-outlined"></i>Xóa</button>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="col-md-2 col-lg-2">
+                      <button type="button" class="btn btn-block btn-success"
+                        (click)="AddLeadsAcctionExtends(leadAction.Index)"><i class="material-icons-outlined"></i>Thêm
+                        TT
+                        mở rộng</button>
+                    </div>
+                  </div>
+                </div>
+                <hr class="hr">
+              </div>
+              <div class="form-group row">
+                <div class="col-md-2 col-lg-2 col-form-label">
+                  <button class="btn btn-block btn-success" (click)="addHTMLInfoCar()" type="button"><i
+                      class="icon-magnifier-add"></i> Thêm thông tin xe</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed2 = !isCollapsed2">
+                {{isCollapsed2?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông về mẫu xe quan tâm</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed3">
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="Version">Phiên bản</label>
+                <div class="col-md-3">
+                  <input id="Version" formControlName="Version" class="form-control" placeholder="Nhập phiên bản">
+                  <span class="help-block"></span>
+                </div>
+                <label class="col-md-1 col-form-label" for="Year">Năm sx</label>
+                <div class="col-md-3">
+                  <input id="Year" formControlName="Year" class="form-control" placeholder="Nhập năm sản xuất">
+                  <span class="help-block"></span>
+                </div>
+                <label class="col-md-1 col-form-label" for="Color">Màu sắc</label>
+                <div class="col-md-3">
+                  <input id="Color" formControlName="Color" class="form-control" placeholder="Nhập màu sắc">
+                  <span class="help-block"></span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="PriceRage">Khoảng giá</label>
+                <div class="col-md-3">
+                  <input id="PriceRage" formControlName="PriceRage" class="form-control" placeholder="Nhập khoảng giá">
+                  <span class="help-block"></span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed3 = !isCollapsed3">
+                {{isCollapsed3?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin thêm về nhu cầu vay mua xe</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed4">
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label" for="StableIncome">Thu nhập qua ngân hàng ổn định hàng tháng
+                </label>
+                <div class="col-md-3 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="StableIncome" formControlName="StableIncome" />
+                  </div>
+                </div>
+                <label class="col-md-2 col-form-label" for="GoodAddress">Có hộ khẩu ở các TP lớn (5 TP TƯ) hay không
+                  (đặc biệt HN, HCM) </label>
+                <div class="col-md-2 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="GoodAddress" formControlName="GoodAddress" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="Job">Nghề nghiệp</label>
+                <div class="col-md-3">
+                  <input type="text" id="Job" formControlName="Job" class="form-control" placeholder="Nhập công việc">
+                </div>
+                <label class="col-md-1 col-form-label" for="Income">Mức thu nhập</label>
+                <div class="col-md-3">
+                  <input type="text" id="Income" formControlName="Income" class="form-control"
+                    placeholder="Thu nhập cá nhân" (change)="changeFormatMoney($event)"
+                    (mouseout)="mouseoutMoney($event)" (click)="clickInputMoney($event)"
+                    (keypress)="clickInputMoney($event)">
+                  <span *ngIf="f.Income?.errors?.pattern" class="text-danger">Bạn hãy nhập số</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed4 = !isCollapsed4">
+                {{isCollapsed4?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin thêm về các mẫu xe khác</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed5">
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label" for="LookingOtherCar">Có đang tìm kiếm những con xe khác không
+                  (hãng khác, model khác)</label>
+                <div class="col-md-2 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="LookingOtherCar"
+                      formControlName="LookingOtherCar" />
+                  </div>
+                </div>
+                <label class="col-md-2 col-form-label" for="OtherCar">Tên xe khác đang tìm kiếm </label>
+                <div class="col-md-2">
+                  <input type="text" id="OtherCar" formControlName="OtherCar" class="form-control"
+                    placeholder="Xe khác">
+                </div>
+                <label class="col-md-2 col-form-label" for="GoodActionDealer">Có cởi mở cho gợi ý từ salesman cho những
+                  dòng xe khác/ hãng xe khác không?</label>
+                <div class="col-md-2 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="GoodActionDealer"
+                      formControlName="GoodActionDealer" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label" for="DealerConsider">Yếu tố gì quan trọng để khách hàng cân nhắc
+                  (tài chính, khuyến mãi giảm giá, dịch vụ đi kèm - hậu mãi)</label>
+                <div class="col-md-10">
+                  <textarea id="DealerConsider" formControlName="DealerConsider" rows="3" class="form-control"
+                    placeholder=""></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed5 = !isCollapsed5">
+                {{isCollapsed5?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin thêm về nhu cầu lái thử</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed8">
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="CityTestDrive">Quận/Huyện muốn lái thử xe</label>
+                <div class="col-md-5 col-form-label">
+                  <textarea id="CityTestDrive" formControlName="CityTestDrive" rows="3" class="form-control"
+                    placeholder="-- Quận/Huyện muốn lái thử xe --"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed8 = !isCollapsed8">
+                {{isCollapsed8?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin thêm về nhu cầu</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed6">
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="IsChangeCar">Đổi xe</label>
+                <div class="col-md-3 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="IsChangeCar" formControlName="IsChangeCar"
+                      (change)="onItemChange()" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row" [hidden]="!selectChangeCar">
+                <label class="col-md-2 col-form-label" for="ChangeCarTime">Đổi xe lần
+                  thứ</label>
+                <div class="col-md-3">
+                  <input type="number" min="0" id="ChangeCarTime" formControlName="ChangeCarTime" class="form-control"
+                    placeholder="">
+                </div>
+                <label class="col-md-2 col-form-label" for="CurrentCar">Xe hiện tại</label>
+                <div class="col-md-3">
+                  <input type="text" id="CurrentCar" formControlName="CurrentCar" class="form-control"
+                    placeholder="Xe hiện tại">
+                </div>
+              </div>
+              <div class="form-group row" [hidden]="!selectChangeCar">
+                <label class="col-md-2 col-form-label" for="IsSoldCar">Có nhu cầu bán xe cũ</label>
+                <div class="col-md-3 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="IsSoldCar" formControlName="IsSoldCar" />
+                  </div>
+                </div>
+                <label class="col-md-2 col-form-label" for="ReasonChangeCar">Lý do muốn đổi xe</label>
+                <div class="col-md-3">
+                  <textarea id="ReasonChangeCar" formControlName="ReasonChangeCar" rows="3" class="form-control"
+                    placeholder="Lý do muốn đổi xe"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed6 = !isCollapsed6">
+                {{isCollapsed6?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="animated fadeIn">
+          <div class="card">
+            <div class="card-header">
+              <strong>Thông tin thêm về gia đình</strong>
+            </div>
+            <div class="card-body" [collapse]="isCollapsed7">
+              <div class="form-group row">
+                <label class="col-md-1 col-form-label" for="HasWife">Có vợ(chồng)</label>
+                <div class="col-md-3 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="HasWife" formControlName="HasWife" />
+                  </div>
+                </div>
+                <label class="col-md-1 col-form-label" for="HasChild">Có con</label>
+                <div class="col-md-3 col-form-label">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="HasChild" formControlName="HasChild" />
+                  </div>
+                </div>
+                <label class="col-md-1 col-form-label" for="FamilyIncome">Thu nhập GĐ </label>
+                <div class="col-md-3">
+                  <input type="text" id="FamilyIncome" formControlName="FamilyIncome" class="form-control"
+                    placeholder="Tổng thu nhập của gia đình" (change)="changeFormatMoney($event)"
+                    (mouseout)="mouseoutMoney($event)" (click)="clickInputMoney($event)"
+                    (keypress)="clickInputMoney($event)">
+                  <span *ngIf="f.FamilyIncome?.errors?.pattern" class="text-danger">Bạn hãy nhập số</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary" (click)="isCollapsed7 = !isCollapsed7">
+                {{isCollapsed7?"Mở rộng":"Thu gọn"}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="form-group row">
+          <label class="col-md-1 col-form-label" for="source">Nguồn<span class="text-danger">*</span></label>
+          <div class="col-md-3">
+            <ng-select id="source" [items]="sources" bindLabel="Value" bindValue="Key" formControlName="SourceLead"
+              placeholder="--Nguồn--">
+            </ng-select>
+            <div *ngIf="(f.SourceLead.touched && f.SourceLead.invalid) || (f.SourceLead.untouched && formSubmitAttempt)"
+              class="text-danger">
+              <span *ngIf="f.SourceLead.errors?.required">Bạn chưa chọn nguồn</span>
+            </div>
+          </div>
+        </div> -->
+      </form>
+    </div>
+    <div class="card-footer">
+      <div class="form-group row">
+        <div *ngIf="modeInsert" class="col-md-2 col-form-label">
+          <button class="btn btn-block btn-success" (click)="submit()" type="button"><i class="icon-magnifier-add"></i>
+            Create</button>
+        </div>
+        <div *ngIf="!modeInsert" class="col-md-2 col-form-label">
+          <button class="btn btn-block btn-success" (click)="submit()" type="button"><i class="nav-icon fa fa-edit"></i>
+            Update</button>
+        </div>
+        <div *ngIf="modeInsert" class="col-md-2 col-form-label">
+          <button class="btn btn-block btn-danger" (click)="reset()" type="reset"><i class="icon-refresh"></i>
+            Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #modalBlockLead="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form name="form" (ngSubmit)="blockLead(formBlock)" #formBlock="ngForm" novalidate>
+        <div class="modal-header">
+          <h4 class="modal-title">Lý do khóa lead</h4>
+          <button type="button" class="close" (click)="hideModelBloclLead();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card-body row">
+            <div class="col-md-12 col-sm-12">
+              <div class="form-group">
+                <label>Nội dung<span class="text-danger">*</span></label>
+                <textarea id="note" [(ngModel)]="noteModel.notes" name='notes' rows="3" class="form-control"
+                  #notes="ngModel" required placeholder="Nội dung...."></textarea>
+                <ng-container *ngIf="isSubmitBlock && notes.invalid">
+                  <span *ngIf="notes.errors.required" class="text-danger">Vui lòng nhập nội dung</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="hideModelBloclLead();">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

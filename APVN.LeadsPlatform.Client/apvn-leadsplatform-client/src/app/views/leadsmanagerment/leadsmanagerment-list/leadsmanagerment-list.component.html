@@ -1,0 +1,399 @@
+<div class="container-fluid">
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <form #searchForm="ngForm" autocomplete="off">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-3 col-lg-3">
+                    <input type="text" class="form-control" placeholder="Nhập SĐT, Họ tên, Email lead"
+                      [(ngModel)]="filterModel.KeyWord" name="KeyWord" />
+                  </div>
+                  <div class="col-md-3 col-lg-3 dialog-dealer">
+                    <!-- <input type="text" class="form-control" placeholder="Nhập dealer name"
+                      [(ngModel)]="filterModel.DealerName" name="DealerName" /> -->
+                    <div class="form-input has_icon popupLink feed-searchbox" style="position: relative;">
+                      <input autocomplete="off" [(ngModel)]="filterModel.DealerName" type="text" name="DealerName"
+                        class="form-control" id="dealer-filter-input-search-form"
+                        placeholder="Nhập dealer email (tối thiểu 3 ký tự)" (keyup)="dealerSearchForm()"
+                        (focus)="dealerFocusInSearchForm()" (focusout)="dealerFocusOutSearchForm()">
+                      <button type="button" class="btn btn-labeled btn-danger closeDateInput"
+                        style="background: transparent; position: absolute; top: 0;right: 0;border: none;"
+                        (click)="deleteDealerNameSearchForm()">
+                        <i class="fa fa-times" style="color: #888; border:none;"></i>
+                      </button>
+                      <div class="dropdown-menu drp-search drp-search-user popup-content hide"
+                        id="box-list-dealer-search-form" #searchDealerModalFormSearch
+                        (scroll)="loadmoreDealerSearForm()">
+                        <div class="notify-elm space-betwen" *ngFor="let item of listDealerSearchForm">
+                          <div class="notify-left">
+                            <div class="notify-content">
+                              <h3 class="title">{{item.userName}} ({{item.mobile}} {{item.email}})</h3>
+                            </div>
+                          </div>
+                          <div class="notify-button-g">
+                            <button class="btn btn-drp bg_theme uppercase btn-danger" type="button"
+                              (click)="setDealerIdSearchForm(item.userName, item.userId)">Chọn</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <input class="form-control" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1"
+                      placeholder="Ngày đăng kí" (change)="onChangeCreateFromDate($event)"
+                      [(ngModel)]="filterModel.CreatedDate" name="CreatedDate" [selectMode]="'range'">
+                    <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <input class="form-control" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2"
+                      placeholder="Ngày chăm sóc" (change)="onChangeCreateFromDate($event)"
+                      [(ngModel)]="filterModel.StartCareDate" name="StartCareDate" [selectMode]="'range'">
+                    <owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="makeList" bindLabel="makeName" bindValue="makeID"
+                      [(ngModel)]="filterModel.MakeId" name="MakeId" placeholder="--Hãng xe--"
+                      (change)="onChangeMake($event)">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="modelList" bindLabel="modelName" bindValue="modelID"
+                      [(ngModel)]="filterModel.ModelId" name="ModelId" placeholder="--Dòng xe--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="secondHandList" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="filterModel.SecondHand" name="SecondHand" placeholder="--Tình trạng xe--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="cityList" bindLabel="cityName" bindValue="cityID"
+                      [(ngModel)]="filterModel.CityId" name="CityId" placeholder="--Tỉnh thành--">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-3 col-lg-3"
+                    *ngIf="permission.IsAdmin() || permission.IsLead() || permission.IsCoordinate() || permission.IsMKT() || permission.IsBD()">
+                    <ng-select [items]="userList" bindLabel="userName" bindValue="userId"
+                      [(ngModel)]="filterModel.AssignToId" name="AssignToId" placeholder="--Giao cho--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="leadStatusList" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="filterModel.Status" name="Status" placeholder="--Trạng thái--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="campaignList" bindLabel="name" bindValue="id"
+                      [(ngModel)]="filterModel.CampaignId" name="CampaignId" placeholder="--Campaign--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="leadsIsActiveList" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="filterModel.IsActive" name="IsActive" placeholder="--Tình trạng leads--">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="boxLeadsList" bindLabel="Value" bindValue="Key" [(ngModel)]="filterModel.Type"
+                      name="Type" placeholder="--Box thu leads--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="bankList" bindLabel="name" bindValue="id" [(ngModel)]="filterModel.BankId"
+                      name="Bank" placeholder="--Ngân hàng--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select [items]="paymentStatusList" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="filterModel.PaymentStatus" name="PaymentStatus"
+                      placeholder="--Hình thức thanh toán--">
+                    </ng-select>
+                  </div>
+                  <div class="col-md-3 col-lg-3">
+                    <ng-select class="hidden" [items]="sourceLeadsList" bindLabel="Value" bindValue="Key"
+                      [(ngModel)]="filterModel.SourceLead" name="SourceLead" placeholder="--Nguồn--">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="d-flex justify-content-end">
+                  <div class="p-2"><button class="btn btn-block btn-success" type="button" (click)="getList(1)"><i
+                        class="icon-magnifier"></i> Tìm kiếm</button></div>
+                  <div class="p-2"><button class="btn btn-block btn-success" type="button"
+                      (click)="searchForm.resetForm(); getListNotFilter(1)"><i class="icon-refresh"></i> Làm
+                      mới</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> <b>DANH SÁCH</b>
+          </div>
+          <div class="card-body">
+            <div class="row" style="margin-top:10px;">
+              <div class="col-md-12 mb-4">
+                <div class="table-responsive">
+                  <table class="table  table-striped table-customer" style="table-layout: fixed;">
+                    <thead>
+                      <tr>
+                        <th style="width: 5%;">Stt</th>
+                        <th style="width: 20%;">Thông tin leads</th>
+                        <th style="width: 15%;">Thông tin xe</th>
+                        <th style="width: 15%;">Campaign</th>
+                        <th style="width: 10%;">Ngày cập nhật</th>
+                        <th style="width: 10%;">Ngày chăm sóc</th>
+                        <th style="width: 10%;">Giao cho</th>
+                        <th style="width: 10%;">Box thu lead</th>
+                        <th style="width: 5%;">Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                        let i=index;let item of list | paginate : { itemsPerPage: filterModel.pageSize, currentPage: filterModel.pageIndex, totalItems: filterModel.totalRecord }
+                      ">
+                        <td class="align-middle">
+                          {{ (filterModel.pageIndex - 1) * filterModel.pageSize + i + 1 }}
+                        </td>
+                        <td class="align-middle">
+                          <p class="text-inline" style="white-space: normal">{{item.fullName}}</p>
+                          <p class="text-inline" style="white-space: normal">{{item.email}}</p>
+                          <p class="text-inline" style="white-space: normal">{{item.mobile}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <p class="text-inline">Hãng: <b>{{item.makeName}}</b></p>
+                          <p class="text-inline">Dòng: <b>{{item.modelName}}</b></p>
+                          <p class="text-inline">Tình trạng xe: <b>{{item.secondHandStr}}</b></p>
+                        </td>
+                        <td class="align-middle">
+                          <p>{{item.campName}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <p>{{item.lastModifiedDateName}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <p>{{item.startCareDateName}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <p>{{item.userName}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <p>{{item.leadsBoxStr}}</p>
+                        </td>
+                        <td class="align-middle">
+                          <div class="btn-group float-right" dropdown>
+                            <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
+                              <i class="icon-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+                              <a [routerLink]="['/leadsmanagerment/get-detail/'+item.id]" target="_blank"
+                                class="dropdown-item">Xem chi
+                                tiết</a>
+
+                              <a *ngIf="(item.isActive && item.id == currUser.userId) || permission.IsAdmin() || permission.IsLead()"
+                                [routerLink]="['/leadsmanagerment/updateLead/'+item.id]" class="dropdown-item">Sửa
+                                lead</a>
+                              <a *ngIf="permission.IsAdmin() || permission.IsLead() || permission.IsSale()"
+                                href="javascript:void(0)" class="dropdown-item" (click)="receivelead(item.id)">
+                                <span>Nhận lead</span>
+                              </a>
+                              <ng-container *ngIf="permission.IsAdmin() || permission.IsLead()">
+                                <a href="javascript:void(0)" class="dropdown-item" (click)="showAssignToSale(item.id)">
+                                  <span>Giao lead</span>
+                                </a>
+                                <a *ngIf="item.isActive" href="javascript:void(0)" class="dropdown-item"
+                                  (click)="resetFormBlock(f);showFormBlock(item.id, item.status)">
+                                  <span>Khóa lead</span>
+                                </a>
+                                <a *ngIf="!(item.isActive)" href="javascript:void(0)" class="dropdown-item"
+                                  (click)="changeIsActiveLead(item.id,!(item.isActive))">
+                                  <span>Mở khóa lead</span>
+                                </a>
+                              </ng-container>
+                              <ng-container
+                                *ngIf="permission.IsAdmin() || permission.IsLead() || permission.IsCoordinate() || permission.IsBD()">
+                                <a href="javascript:void(0)" class="dropdown-item"
+                                  (click)="assignLeadToDealder.leadsId = +item.id;showAssignToDealer()">
+                                  <span>Gán lead cho dealer</span>
+                                </a>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="card-foot">
+            <pagination-controls class="pagination-md" (pageChange)="pageChange($event)" maxSize="10"
+              directionLinks="true" responsive="true" previousLabel="Previous" nextLabel="Next"
+              screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page">
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #assignDealer="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Gán Lead cho Dealer</h4>
+        <button type="button" class="close" (click)="assignDealer.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body dialog-dealer">
+        <div class="card-body row">
+          <div class="col-md-12 col-sm-12">
+            <div class="form-input mt-3 select-box-leadaction" style="position: relative;">
+              <span class="form-control"
+                style="margin-bottom: 1rem;line-height: 35px;height: 70px;">{{assignLeadToDealder.lstDealerName.length > 0 ? assignLeadToDealder.lstDealerName.join(', ') : "Email Dealers được chọn"}}</span>
+              <button type="button" class="btn btn-labeled btn-danger closeDateInput"
+                style="background: #f86c6b; position: absolute; top: 0;right: 0;border: none;color: #fff;line-height: 58px;"
+                (click)="deleteUserDearlerChosen()">
+                Xóa
+              </button>
+            </div>
+            <div class="form-input has_icon popupLink feed-searchbox" style="position: relative;">
+              <input autocomplete="off" [(ngModel)]="dealerIndex.userNameFilter" type="text" class="form-control"
+                id="dealer-filter-input" placeholder="Dealer email(tối thiểu 3 kí tự)" (keyup)="searchDealer()"
+                (focus)="searchDearlerFocusIn()" (focusout)="searchDealerFocusOut()">
+              <button type="button" class="btn btn-labeled btn-danger closeDateInput"
+                style="background: transparent; position: absolute; top: 0;right: 0;border: none;"
+                (click)="deleteUserNameFilter()">
+                <i class="fa fa-times" style="color: #888; border:none;"></i>
+              </button>
+              <div class="dropdown-menu drp-search drp-search-user popup-content hide" id="box-list-dealer"
+                #searchDealerModal (scroll)="loadmoreDealer()">
+                <div class="notify-elm space-betwen" *ngFor="let item of listDealerFromOto">
+                  <div class="notify-left">
+                    <div class="notify-content">
+                      <h3 class="title">{{item.userName}} ({{item.mobile}} {{item.email}})</h3>
+                    </div>
+                  </div>
+                  <div class="notify-button-g">
+                    <button class="btn btn-drp bg_theme uppercase btn-primary" type="button"
+                      (click)="setDealerId(item.userName, item.userId)">Chọn</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-input mt-3 select-box-leadaction">
+              <ng-select [items]="listLeadsAction" bindLabel="Value" bindValue="Key"
+                [(ngModel)]="assignLeadToDealder.leadsActionId" placeholder="Danh sách box Thông tin xe"
+                (change)="setPaymentSatatus()">
+              </ng-select>
+            </div>
+            <div class="form-input mt-3 select-box-leadaction">
+              <ng-select [items]="paymentStatusListForDealer" bindLabel="Value" bindValue="Key"
+                [(ngModel)]="assignLeadToDealder.leadActionPaymentStatus" placeholder="Trạng thái thanh toán">
+              </ng-select>
+            </div>
+            <div class="form-input mt-3">
+              <textarea class="form-control" [(ngModel)]="assignLeadToDealder.dealerNote"
+                placeholder="Ghi chú về Dealer này" style="padding-top: 10px;"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="assignDealer.hide();">Close</button>
+        <button type="submit" class="btn btn-primary" (click)="saveAssignToDealer()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- /.modal-assignSale -->
+<div bsModal #assignSale="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Gán Lead cho CS</h4>
+        <button type="button" class="close" (click)="assignSale.hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body dialog-dealer">
+        <div class="card-body row">
+          <div class="col-md-12 col-sm-12">
+            <div class="form-input mt-3 select-box-leadaction">
+              <ng-select [items]="userList" bindLabel="userName" bindValue="userId" [(ngModel)]="saleSelected"
+                placeholder="Select Saler">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="assignSale.hide();">Close</button>
+        <button type="submit" class="btn btn-primary" (click)="saveAssignToSale()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div bsModal #modalBlockLead="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+  [config]="{ backdrop: 'static' }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form name="form" (ngSubmit)="blockLead(f)" #f="ngForm" novalidate>
+        <div class="modal-header">
+          <h4 class="modal-title">Lý do khóa lead</h4>
+          <button type="button" class="close" (click)="modalBlockLead.hide();" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card-body row">
+            <div class="col-md-12 col-sm-12">
+              <div class="form-group">
+                <label>Nội dung<span class="text-danger">*</span></label>
+                <textarea id="note" [(ngModel)]="noteModel.notes" name='notes' rows="3" class="form-control"
+                  #notes="ngModel" required placeholder="Nội dung...."></textarea>
+                <ng-container *ngIf="isSubmitBlock && notes.invalid">
+                  <span *ngIf="notes.errors.required" class="text-danger">Vui lòng nhập nội dung</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modalBlockLead.hide();">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
